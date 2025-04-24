@@ -1,3 +1,5 @@
+![utilsBox](./assets/logo.svg)
+
 # 🧰 utils-box
 
 A modern utility-first TypeScript library packed with reusable **React hooks**, **Next.js enhancements**, and *
