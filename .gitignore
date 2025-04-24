@@ -1,0 +1,35 @@
+# Node & dependency folders
+node_modules/
+dist/
+.cache/
+.vite/
+.next/
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.log
+
+# Env files
+.env
+.env.*.local
+
+# Output from testing
+coverage/
+
+# Mac/Linux system files
+.DS_Store
+
+# Husky
+.husky/
+
+# Prettier files
+.prettiercache
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# Optional: lockfiles
+package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
