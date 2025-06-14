@@ -1,0 +1,8 @@
+packages:
+  - utils-box
+  - doc-web
+ignoredBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - esbuild
+  - sharp
+  - unrs-resolver

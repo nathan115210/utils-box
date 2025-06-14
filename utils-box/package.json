@@ -1,0 +1,60 @@
+{
+  "name": "utils-box",
+  "version": "0.1.0",
+  "description": "Reusable React & Next.js hooks and TypeScript utilities",
+  "main": "dist/utils-box.cjs.js",
+  "module": "dist/utils-box.es.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    "./react/*": "./dist/react/*",
+    "./utils/*": "./dist/utils/*"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepare": "husky install",
+    "dev": "vite",
+    "dev:utils": "pnpm run --filter utils-box dev",
+    "build": "vite build",
+    "test": "vitest",
+    "format": "prettier --write \"utils-box/src/**/*.{ts,tsx,json,md}\""
+  },
+  "keywords": [
+    "react-hooks",
+    "nextjs-hooks",
+    "typescript-utils",
+    "vite-library"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "peerDependencies": {
+    "next": "^15.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx, json}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
+    "lint-staged": "^15.5.1",
+    "next": "^15.3.1",
+    "prettier": "3.5.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.2",
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "^3.1.2"
+  },
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
+}
