@@ -1,15 +1,9 @@
 [
   {
-    "id": 1,
-    "tags": ["react"],
-    "slug": "usefavicon",
-    "name": "useFavicon",
-    "shortIntro": "React hook to dynamically update the favicon.",
-    "description": "This hook allows you to change the favicon of your application dynamically by providing a URL or path to the desired icon."
-  },
-  {
     "id": 2,
-    "tags": ["utility function"],
+    "tags": [
+      "utility function"
+    ],
     "slug": "usedebounce",
     "name": "useDebounce",
     "shortIntro": "Debounce a rapidly changing value.",
