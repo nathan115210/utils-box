@@ -1,4 +1,6 @@
 # Node & dependency folders
+utils-box/node_modules/
+doc-web/node_modules/
 node_modules/
 dist/
 .cache/
@@ -6,7 +8,6 @@ dist/
 .next/
 
 # IDE/editor configs
-.vscode/
 .idea/
 *.log
 
