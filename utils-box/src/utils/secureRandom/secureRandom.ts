@@ -30,7 +30,11 @@
  * // => an integer number between 0 and Number.MAX_SAFE_INTEGER
  */
 
-const secureRandom = (min: number = 0, max: number = Number.MAX_SAFE_INTEGER, integer?: boolean): number => {
+const secureRandom = (
+  min: number = 0,
+  max: number = Number.MAX_SAFE_INTEGER,
+  integer?: boolean
+): number => {
   // Ensure `range.min` is finite; if not (e.g. -Infinity)
   // Fall back to 0. Instead of Number.MIN_SAFE_INTEGER, to avoid negative number.
   let minValue = Number.isFinite(min) ? min : 0;
@@ -63,7 +67,7 @@ const secureRandom = (min: number = 0, max: number = Number.MAX_SAFE_INTEGER, in
   const array = new Uint32Array(1);
   crypto.getRandomValues(array);
   //Note - In this case, Uint32Array always has a fixed length and always returns a number.
-  const rand = array[0]! / (0xFFFFFFFF + 1);
+  const rand = array[0]! / (0xffffffff + 1);
 
   /**
    * Scale `rand` to the desired range, and return.
@@ -82,7 +86,6 @@ const secureRandom = (min: number = 0, max: number = Number.MAX_SAFE_INTEGER, in
     // Return float in [min, max)
     return rand * (maxValue - minValue) + minValue;
   }
-
 };
 
 export default secureRandom;

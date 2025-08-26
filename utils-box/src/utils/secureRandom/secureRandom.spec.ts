@@ -23,7 +23,7 @@ describe('secureRandom', () => {
       const result = secureRandom(1, 7.7);
       expect(result).toBeGreaterThanOrEqual(1);
       expect(result).toBeLessThan(7.7);
-      expect(Number.isInteger((result))).toBe(false);
+      expect(Number.isInteger(result)).toBe(false);
     }
   });
 
@@ -32,14 +32,14 @@ describe('secureRandom', () => {
       const result = secureRandom(0.1, 7);
       expect(result).toBeGreaterThanOrEqual(0.1);
       expect(result).toBeLessThan(7);
-      expect(Number.isInteger((result))).toBe(false);
+      expect(Number.isInteger(result)).toBe(false);
     }
   });
 
   it('SHOULD return integer in [ceil(min), floor(max)] if integer=true', () => {
     for (let i = 0; i < 10; i++) {
       const value = secureRandom(0.1, 7.9, true);
-      expect(Number.isInteger((value))).toBe(true);
+      expect(Number.isInteger(value)).toBe(true);
       expect(value).toBeGreaterThanOrEqual(1);
       expect(value).toBeLessThanOrEqual(7);
     }
@@ -66,8 +66,6 @@ describe('secureRandom', () => {
     for (let i = 0; i < 10; i++) {
       const value = secureRandom(5, 5);
       expect(value).equal(5);
-
     }
   });
-
 });
