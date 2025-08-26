@@ -18,7 +18,7 @@
  * // => an integer number between 1 and 20
  *
  * secureRandom(1, 2.7)
- * // => a floating-point number between 1 and 2.7 (
+ * // => a floating-point number between 1 and 2.7
  *
  * secureRandom(0.1, 7)
  * // => a floating-point number between 0.1 and 7
@@ -35,11 +35,16 @@ const secureRandom = (min: number = 0, max: number = Number.MAX_SAFE_INTEGER, in
   // Fall back to 0. Instead of Number.MIN_SAFE_INTEGER, to avoid negative number.
   let minValue = Number.isFinite(min) ? min : 0;
   //Ensure `range.max` is finite; if not (e.g. Infinity), fall back to the highest safe integer.
-  // Number.MIN_SAFE_INTEGER
+
   let maxValue = Number.isFinite(max) ? max : Number.MAX_SAFE_INTEGER;
 
+  // When min equals max, return min, as there is no range to randomize.
+  if (minValue === maxValue) {
+    return minValue;
+  }
+
   // Revert min and max if min > max
-  if (minValue >= maxValue) {
+  if (minValue > maxValue) {
     let tempNum: number = minValue;
     minValue = maxValue;
     maxValue = tempNum;

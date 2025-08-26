@@ -62,4 +62,12 @@ describe('secureRandom', () => {
     }
   });
 
+  it('SHOULD handle min === max by return min value', () => {
+    for (let i = 0; i < 10; i++) {
+      const value = secureRandom(5, 5);
+      expect(value).equal(5);
+
+    }
+  });
+
 });
