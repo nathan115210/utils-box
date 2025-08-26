@@ -1,9 +1,9 @@
 // React custom hooks
-export * from './react/useDebounce/useDebounce';
-export * from './react/usePictureInPicture/usePictureInPicture';
+export { default as useDebounce } from './react/useDebounce/useDebounce';
+export { default as usePictureInPicture } from './react/usePictureInPicture/usePictureInPicture';
 
 //Next.js custom hooks
 
 // Utility functions
-export * from './utils/formatBytes/formatBytes';
-export * from './utils/secureRandom/secureRandom';
+export { default as formatBytes } from './utils/formatBytes/formatBytes';
+export { default as secureRandom } from './utils/secureRandom/secureRandom';

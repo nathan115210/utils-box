@@ -18,7 +18,7 @@
     "dev:utils": "pnpm run --filter utils-box dev",
     "build": "vite build",
     "test": "vitest",
-    "format": "prettier --write \"utils-box/src/**/*.{ts,tsx,json,md}\""
+    "format": "prettier --write src/**/*.{ts,tsx,md}"
   },
   "keywords": [
     "react-hooks",
