@@ -35,7 +35,15 @@
     "react-dom": "^19.1.0"
   },
   "lint-staged": {
-    "*.{ts,tsx,json,md,yml,yaml}": [
+    "src/**/*.{ts,tsx}": [
+      "eslint --max-warnings=0 --fix",
+      "prettier --write"
+    ],
+    "{*.ts,*.config.ts,config/**/*.ts,vite.config.ts,vitest.*.ts,vitest.config.ts,vitest.setup.ts}": [
+      "eslint --max-warnings=0 --fix",
+      "prettier --write"
+    ],
+    "**/*.{json,md,mdx,yml,yaml}": [
       "prettier --write"
     ]
   },
@@ -47,6 +55,15 @@
     "@types/node": "^22.14.1",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-unused-imports": "^4.2.0",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "^15.5.1",
@@ -55,6 +72,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "typescript": "^5.8.3",
+    "typescript-eslint": "^8.41.0",
     "vite": "^6.3.2",
     "vite-plugin-dts": "^4.5.3",
     "vitest": "^3.1.2"
