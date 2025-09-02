@@ -1,0 +1,8 @@
+node_modules
+.next
+.out
+.turbo
+.vercel
+.idea
+package-lock.json
+pnpm-lock.yaml

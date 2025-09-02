@@ -1,6 +1,4 @@
 # Node & dependency folders
-utils-box/node_modules/
-doc-web/node_modules/
 node_modules/
 dist/
 .cache/
@@ -21,9 +19,6 @@ coverage/
 # Mac/Linux system files
 .DS_Store
 
-# Husky
-.husky/
-
 # Prettier files
 .prettiercache
 
@@ -34,3 +29,6 @@ tsconfig.tsbuildinfo
 package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
+
+# keep husky hooks in repo
+!.husky/

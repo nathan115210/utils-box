@@ -2,7 +2,6 @@ import { defineConfig } from 'vitest/config';
 import dts from 'vite-plugin-dts';
 import path from 'path';
 
-
 export default defineConfig({
   build: {
     lib: {

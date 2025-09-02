@@ -45,14 +45,14 @@ export type GuardReturn = {
  * - To optimize performance, set `root` to the smallest stable container instead of defaulting to `document.body`.
  */
 
-  // Config shared by all observer.observe calls
+// Config shared by all observer.observe calls
 const observerConfig: MutationObserverInit = {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ['style', 'class'],
-    attributeOldValue: true,
-  };
+  childList: true,
+  subtree: true,
+  attributes: true,
+  attributeFilter: ['style', 'class'],
+  attributeOldValue: true,
+};
 
 function guardElement(elementId: string, opts: GuardOptions = {}): GuardReturn {
   const root: ParentNode = opts.root ?? document.body;
@@ -83,8 +83,7 @@ function guardElement(elementId: string, opts: GuardOptions = {}): GuardReturn {
       if (m.type === 'attributes' && m.target === el) {
         const vis = el.style.visibility;
         const display = el.style.display;
-        const isHidden =
-          display === 'none' || vis === 'hidden' || vis === 'collapse';
+        const isHidden = display === 'none' || vis === 'hidden' || vis === 'collapse';
 
         if (isHidden) {
           observer.disconnect();
