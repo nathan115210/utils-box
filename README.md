@@ -2,8 +2,8 @@
 
 # 🧰 utils-box
 
-A modern utility-first TypeScript library packed with reusable **React hooks**, **Next.js enhancements**, and *
-*general-purpose helpers** — built with performance, testing, and developer experience in mind.
+A modern utility-first TypeScript library packed with reusable **React hooks**, **Next.js enhancements**, and \*
+\*general-purpose helpers\*\* — built with performance, testing, and developer experience in mind.
 
 ---
 

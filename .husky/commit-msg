@@ -1,0 +1,29 @@
+#!/bin/sh
+
+MSG_FILE="$1"
+MSG="$(cat "$MSG_FILE")"
+
+# Pre-check: enforce type(scope): subject
+# Allowed types: feat|fix|refactor|docs|chore|test|ci
+if ! printf '%s' "$MSG" | grep -Eq '^(feat|fix|refactor|docs|chore|test|ci)\([^)]+\): .+'; then
+  cat >&2 <<'EOM'
+❌ Invalid commit message.
+
+Expected: type(scope): subject
+Allowed types: feat | fix | refactor | docs | chore | test | ci
+
+Examples:
+  feat(utils): add new util helper
+  fix(useDebounce): fix debounce timing
+  refactor(useDebounce): simplify hook logic
+EOM
+  exit 1
+fi
+
+# Run commitlint for deeper rules (length, etc.)
+pnpm exec commitlint --edit "$MSG_FILE"
+RC=$?
+if [ $RC -ne 0 ]; then
+  echo >&2 "ℹ️ See CONTRIBUTING.md#commit-message-format for details."
+fi
+exit $RC
