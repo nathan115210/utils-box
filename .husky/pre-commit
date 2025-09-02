@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpm test
-pnpm lint-staged
+pnpm lint-staged       # auto-fix staged files
+pnpm format:check      # ensure everything is formatted
