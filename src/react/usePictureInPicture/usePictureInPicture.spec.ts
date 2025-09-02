@@ -1,5 +1,6 @@
-import { describe, vi, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
+import { describe, vi, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
+
 import usePictureInPicture from './usePictureInPicture';
 
 describe('usePictureInPicture', () => {

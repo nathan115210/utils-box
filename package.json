@@ -19,7 +19,13 @@
     "build": "vite build",
     "test": "vitest",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "lint:fix:tests": "eslint \"src/**/*.{spec,test}.{ts,tsx}\" --fix",
+    "ci:act": "act -W .github/workflows/pr-ci.yml -P ubuntu-latest=catthehacker/ubuntu:act-22.04",
+    "ci:act:lint": "act -W .github/workflows/pr-ci.yml -j lint -P ubuntu-latest=catthehacker/ubuntu:act-22.04",
+    "ci:act:build": "act -W .github/workflows/pr-ci.yml -j build -P ubuntu-latest=catthehacker/ubuntu:act-22.04",
+    "ci:act:test": "act -W .github/workflows/pr-ci.yml -j test -P ubuntu-latest=catthehacker/ubuntu:act-22.04"
   },
   "keywords": [
     "react-hooks",
