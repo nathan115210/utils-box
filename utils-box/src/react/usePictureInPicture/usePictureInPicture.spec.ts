@@ -1,6 +1,6 @@
 import { describe, vi, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { usePictureInPicture } from './usePictureInPicture';
+import usePictureInPicture from './usePictureInPicture';
 
 describe('usePictureInPicture', () => {
   let originalPictureInPictureEnabled: boolean;
