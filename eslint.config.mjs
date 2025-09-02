@@ -17,8 +17,8 @@ export default [
       '.next/**',
       '.out/**',
       '.turbo/**',
-      '.vercel/**'
-    ]
+      '.vercel/**',
+    ],
   },
   // TypeScript + React rules
   {
@@ -28,15 +28,15 @@ export default [
       parserOptions: {
         project: ['./tsconfig.eslint.json'],
         tsconfigRootDir: import.meta.dirname,
-        ecmaFeatures: { jsx: true }
-      }
+        ecmaFeatures: { jsx: true },
+      },
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
       react,
       'react-hooks': reactHooks,
       import: importPlugin,
-      'unused-imports': unusedImports
+      'unused-imports': unusedImports,
     },
     settings: { react: { version: 'detect' } },
     rules: {
@@ -47,7 +47,7 @@ export default [
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': [
         'error',
-        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
+        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
       ],
 
       // Keep imports tidy (make it error so no warnings trip your hook)
@@ -56,14 +56,14 @@ export default [
         {
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'type'],
           'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true }
-        }
+          alphabetize: { order: 'asc', caseInsensitive: true },
+        },
       ],
 
       // Let TS handle undefineds
-      'no-undef': 'off'
-    }
+      'no-undef': 'off',
+    },
   },
   // turn off stylistic rules that clash with Prettier
-  prettier
+  prettier,
 ];
