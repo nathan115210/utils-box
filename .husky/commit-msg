@@ -4,13 +4,13 @@ MSG_FILE="$1"
 MSG="$(cat "$MSG_FILE")"
 
 # Pre-check: enforce type(scope): subject
-# Allowed types: feat|fix|refactor|docs|chore|test|ci
-if ! printf '%s' "$MSG" | grep -Eq '^(feat|fix|refactor|docs|chore|test|ci)\([^)]+\): .+'; then
+# Allowed types: feat|fix|refactor|doc|chore|test|ci
+if ! printf '%s' "$MSG" | grep -Eq '^(feat|fix|refactor|doc|chore|test|ci)\([^)]+\): .+'; then
   cat >&2 <<'EOM'
 ❌ Invalid commit message.
 
 Expected: type(scope): subject
-Allowed types: feat | fix | refactor | docs | chore | test | ci
+Allowed types: feat | fix | refactor | doc | chore | test | ci
 
 Examples:
   feat(utils): add new util helper
