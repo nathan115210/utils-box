@@ -1,26 +1,26 @@
 ![utilsBox](./logo.svg)
 
-# 🧰 utils-box
+# utils-box
 
 A modern utility-first TypeScript library packed with reusable **React hooks**, **Next.js enhancements**, and \*
 \*general-purpose helpers\*\* — built with performance, testing, and developer experience in mind.
 
 ---
 
-## ✨ Features
+## Features
 
-- ⚛️ **React Hooks** – debounce, local storage, Picture-in-Picture, and more
-- 🔁 **Next.js Support** – router/query helpers for App Router
-- 🛠 **Utility Helpers** – format bytes, throttle, deep clone, etc.
-- 📦 **Tree-shakable** – ESM & CJS builds with full type support
-- ✅ **Tested** – Unit tested with [Vitest](https://vitest.dev/)
-- 🧪 **Type-safe** – Built entirely with strict TypeScript
-- 🧹 **Prettified** – Auto-formatted, linted, and pre-committed
-- 🔄 **Local Playground** – Try everything in `doc-web` example app
+- ️**React Hooks** – debounce, local storage, Picture-in-Picture, and more
+- **Next.js Support** – router/query helpers for App Router
+- **Utility Helpers** – format bytes, throttle, deep clone, etc.
+- **Tree-shakable** – ESM & CJS builds with full type support
+- **Tested** – Unit tested with [Vitest](https://vitest.dev/)
+- **Type-safe** – Built entirely with strict TypeScript
+- **Prettified** – Auto-formatted, linted, and pre-committed
+- **Local Playground** – Try everything in `doc-web` example app
 
 ---
 
-## 📦 Installation (External Usage)
+## Installation (External Usage)
 
 ```bash
 npm install utils-box
@@ -32,15 +32,16 @@ or with yarn/pnpm:
 yarn add utils-box
 # or
 pnpm add utils-box
+
 ```
 
 ---
 
-## 🧪 Local Development Setup
+## Local Development Setup
 
-### 🧱 Monorepo Structure
+### Monorepo Structure
 
-```
+```perl
 utils-box/
 ├── package.json
 ├── pnpm-workspace.yaml
@@ -56,14 +57,14 @@ utils-box/
 │   └── tsconfig.json
 ```
 
-### 🚀 Install & Build
+### Install & Build
 
 ```bash
 pnpm install
 pnpm run --filter utils-box... build
 ```
 
-> Then, `doc-web` can import from `utils-box` as a local dependency:
+> Then, doc-web can import from utils-box as a local dependency:
 
 ```ts
 import { useDebounce } from 'utils-box/react/useDebounce';
@@ -71,9 +72,9 @@ import { useDebounce } from 'utils-box/react/useDebounce';
 
 ---
 
-## 📚 Usage
+## Usage
 
-### ✅ React Hook
+### React Hook
 
 ```tsx
 import { useDebounce } from 'utils-box';
@@ -89,7 +90,7 @@ const SearchInput = ({ query }) => {
 };
 ```
 
-### ✅ Utility Helper
+### Utility Helper
 
 ```ts
 import { formatBytes } from 'utils-box';
@@ -99,9 +100,9 @@ console.log(formatBytes(1048576)); // "1 MB"
 
 ---
 
-## 📂 Package Directory Structure
+## Package Directory Structure
 
-```
+```perl
 utils-box/
 └── src/
     ├── react/        # React hooks
@@ -112,44 +113,170 @@ utils-box/
 
 ---
 
-## 🧪 Run Tests
+## Run Tests
 
 ```bash
-pnpm run --filter utils-box test
+pnpm run --filter utils-box... test
 ```
 
 ---
 
-## 🧼 Format Code
+### Format Code
 
 ```bash
-pnpm run --filter utils-box format
+pnpm run --filter utils-box format     # write fixes with Prettier
+pnpm run --filter utils-box format:check
 ```
 
 ---
 
-## 🧰 Example Playground
+## Tooling & Automation
 
-Visit `doc-web` at:
+This repo is wired for a consistent DX: Prettier, ESLint (flat config), Husky + lint-staged, strict commit messages, and
+a CI lint job you can also run locally with act.
+
+### Prettier
+
+- Config: `.prettierrc.json`
+
+- Ignore: `.prettierignore` (includes `node_modules`, `dist`, `coverage`, `.pnpm-store/`, etc.)
+
+- Commands:
+
+  ```bash
+  pnpm format        # prettier --write .
+  pnpm format:check  # prettier --check .
+  ```
+
+  > We do not ignore `package.json` — Prettier formats it nicely.
+
+### ESLint (Flat Config)
+
+- Config: `eslint.config.mjs` (flat config)
+
+- TypeScript via `@typescript-eslint/*`
+
+- React via `eslint-plugin-react` & `react-hooks`
+
+- Import hygiene via `eslint-plugin-import` (grouping + alpha)
+
+- Prettier compatibility via `eslint-config-prettier`
+
+#### Lint targets
+
+- App code: `src/**/*.{ts,tsx}`
+
+- Config/setup files: `vite.config.ts`, `vitest.*.ts`, `vitest.setup.ts`, `*.config.ts`, `config/**/*.ts`
+
+#### Helpful scripts
 
 ```bash
-pnpm run --filter doc-web dev
+pnpm lint:fix  # ESLint autofix only on src/**/*.{ts,tsx}
 ```
 
-> A Next.js 15 playground for trying out your utilities and hooks
+> If you use `parserOptions.project`, ensure `tsconfig.eslint.json` includes the config/setup files above.
+
+### Git Hooks (Husky + lint-staged)
+
+- Husky is bootstrapped with `"prepare": "husky"`.
+
+- pre-commit runs:
+
+  ```bash
+  pnpm lint-staged
+  pnpm format:check
+  ```
+
+- lint-staged rules:
+
+  - `**/*.{ts,tsx}` → `eslint --max-warnings=0 --fix` then `prettier --write`
+
+  - `{*.ts,*.config.ts,config/**/*.ts,vite.config.ts,vitest.*.ts}` → same
+
+  - `**/*.{json,md,mdx,yml,yaml}` → `prettier --write`
+
+  > If `.husky/` was ignored by `.gitignore`, unignore it (e.g. add `!.husky/*`) so hooks are committed.
+
+### Commit Messages Convention
+
+#### Format:
+
+```
+type(scope): subject
+```
+
+_Allowed types:_ `feat | fix | refactor | doc | chore | test | ci`
+_Scope:_ required, in parentheses • _Subject_: required, after `:`
+
+Examples:
+
+```
+feat(utils): add new util helper
+fix(useDebounce): fix debounce timing
+refactor(useDebounce): simplify hook logic
+```
+
+### Enforcement
+
+- Fast regex gate in `.husky/commit-msg` (clear error messages)
+
+- Then `commitlint` for deeper checks (length, casing, etc.)
+
+> Husky v9+ note: do not source `husky.sh` inside `commit-msg` (remove any legacy `husky.sh` lines).
+
+### CI: Lint in GitHub Actions
+
+- Runs on `ubuntu-latest`, _Node 20.x, pnpm_
+
+- Caches pnpm store (store dir set to `~/.pnpm-store`)
+
+- Prettier checks tracked files only (avoids `node_modules`, caches)
+
+- ESLint runs with `--max-warnings=0`, `--no-warn-ignored`, and safe globs
+
+#### High level:
+
+- `actions/checkout@v4`
+
+- `actions/setup-node@v4` (`node-version: 20`, `cache: pnpm`)
+
+- `pnpm/action-setup@v4` + `pnpm config set store-dir ~/.pnpm-store` (cache this path)
+
+- `pnpm install`
+
+- _Prettier (tracked)_
+
+- _ESLint (flat config)_
+
+### Run the CI workflow locally (Docker)
+
+Use [`act?](https://github.com/nektos/act) to simulate GitHub Actions:
+
+```bash
+pnpm ci:act         # run the whole .github/workflows/ci.yml
+pnpm ci:act:lint    # run only the lint job
+pnpm ci:act:test    # run only the test job (if defined)
+pnpm ci:act:build   # run only the build job (if defined)
+# Apple Silicon tip:
+pnpm ci:act:lint -- --container-architecture linux/amd64
+```
 
 ---
 
-## 🧱 Contributing
+### Contributing
 
-1. Fork the repo
-2. Create your feature branch: `git checkout -b feat/your-feature`
-3. Commit changes: `git commit -am 'add: your feature'`
-4. Push to the branch: `git push origin feat/your-feature`
-5. Open a Pull Request 🚀
+- Fork the repo
+
+- Create your feature branch: git checkout -b feat/your-feature
+
+- Commit changes: git commit -am 'feat(scope): your subject'
+
+- Push to the branch: git push origin feat/your-feature
+
+- Open a Pull Request
 
 ---
 
-## 📜 License
+### License
 
-MIT © [Zhao Hongyu](https://zhaohongyu.netlify.app/)
+MIT [©Zhao Hongyu](https://zhaohongyu.netlify.app/)
