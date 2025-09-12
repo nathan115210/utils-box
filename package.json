@@ -2,16 +2,51 @@
   "name": "utils-box",
   "version": "0.1.0",
   "description": "Reusable React & Next.js hooks and TypeScript utilities",
-  "main": "dist/utils-box.cjs.js",
-  "module": "dist/utils-box.es.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
   "types": "dist/types/index.d.ts",
   "exports": {
-    "./react/*": "./dist/react/*",
-    "./utils/*": "./dist/utils/*"
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./react/*": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/react/*/*.mjs",
+      "require": "./dist/react/*/*.cjs"
+    },
+    "./utils/*": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/utils/*/*.mjs",
+      "require": "./dist/utils/*/*.cjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "react/*": [
+        "dist/types/index.d.ts"
+      ],
+      "utils/*": [
+        "dist/types/index.d.ts"
+      ],
+      "*": [
+        "dist/types/index.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"
   ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
+  },
   "scripts": {
     "prepare": "husky",
     "dev": "vite",
