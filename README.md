@@ -263,7 +263,7 @@ pnpm ci:act:lint -- --container-architecture linux/amd64
 
 ---
 
-### Contributing
+## Contributing
 
 - Fork the repo
 
@@ -274,6 +274,32 @@ pnpm ci:act:lint -- --container-architecture linux/amd64
 - Push to the branch: git push origin feat/your-feature
 
 - Open a Pull Request
+
+### Local Dev Loop (test in another project without publishing)
+
+You can develop **utils-box** and try it live in another app using a local link.
+
+- In utils-box, terminal A:
+
+  ```bash
+  pnpm run build:watch
+  ```
+
+- In your **test app** (e.g. `/dev/my-app/react`), terminal B:
+
+  ```bash
+  # remove any previous install (ok if it wasn't installed)
+  pnpm remove utils-box || true
+
+  # add a symlink to your local package (adjust the path if needed)
+  pnpm add link:../../utils-box
+
+  # start your app's dev server
+  pnpm dev
+  ```
+
+Now edit code in `utils-box/src/**` → it rebuilds to `dist/` → your test app auto-picks changes (HMR or after a
+refresh).
 
 ---
 
