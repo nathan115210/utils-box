@@ -1,0 +1,102 @@
+name: Pre-release QA
+
+on:
+  # Manual run for dry-runs before tagging
+  workflow_dispatch:
+  # Auto-run full QA on RC tags (vX.Y.Z-rc.N)
+  push:
+    tags:
+      - 'v*.*.*-rc.*'
+  # Lightweight QA on PRs that touch build/runtime files
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'tsconfig*.json'
+      - 'vite.config.*'
+      - 'vitest*.ts'
+      - 'eslint.config.*'
+      - '.github/actions/**'
+      - '.github/workflows/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  # Avoid piling up runs for the same ref
+  group: pre-release-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qa:
+    name: Build, Smoke, Smart Pack
+    runs-on: ubuntu-latest
+    # Don’t run on draft PRs
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    env:
+      CI: true
+
+    steps:
+      # 1) Checkout repo
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2) DRY setup: Node + pnpm + cache + install via your composite action
+      - name: Setup (Node + pnpm + cache + install)
+        uses: ./.github/actions/pnpm-setup
+        with:
+          node-version: '20'
+          install: 'true' # run `pnpm install` inside composite
+
+      # Optional: print tool versions (handy for debugging and when using `act`)
+      - name: Show tool versions
+        run: |
+          node -v
+          pnpm -v
+          tsc -v || true
+
+      # 3) Clean & build the library
+      - name: Clean dist
+        run: rm -rf dist
+
+      - name: Build (Vite)
+        run: pnpm build
+
+      # 4) Smoke test both bundle formats to ensure they’re loadable
+      - name: Smoke test (CJS)
+        run: node -e "require('./dist/index.cjs'); console.log('CJS OK')"
+
+      - name: Smoke test (ESM)
+        run: node -e "import('./dist/index.mjs').then(()=>console.log('ESM OK'))"
+
+      # 5) Publint: validate exports/files/types map like a published package
+      - name: Publint
+        run: pnpm dlx publint@latest
+
+      # Pack only on RC tags
+      - name: Create pack artifact
+        if: startsWith(github.ref, 'refs/tags/v') && contains(github.ref, '-rc.')
+        run: |
+          mkdir -p artifacts
+          pnpm pack --pack-destination artifacts
+          ls -lah artifacts
+          tar -tzf artifacts/*.tgz | sed -n '1,120p'
+
+      # Upload to GitHub (real runners only)
+      - name: Upload .tgz artifact
+        if: startsWith(github.ref, 'refs/tags/v') && contains(github.ref, '-rc.') && env.ACT != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: utils-box-tarball
+          path: artifacts/*.tgz
+          if-no-files-found: error
+          retention-days: 5
+
+      # Save locally when running via `act`
+      - name: Save .tgz locally (act)
+        if: startsWith(github.ref, 'refs/tags/v') && contains(github.ref, '-rc.') && env.ACT == 'true'
+        run: |
+          mkdir -p act-artifacts
+          cp artifacts/*.tgz act-artifacts/
+          echo "Saved to ./act-artifacts"

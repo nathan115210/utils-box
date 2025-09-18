@@ -248,22 +248,62 @@ refactor(useDebounce): simplify hook logic
 
 - _ESLint (flat config)_
 
-### Run the CI workflow locally (Docker)
+### Run the CI workflows locally (Docker)
 
-Use [`act?](https://github.com/nektos/act) to simulate GitHub Actions:
+Use [`act`](https://github.com/nektos/act) to simulate GitHub Actions on your machine.
+
+> These commands assume the project has the following scripts:
+> `ci:act:pr`, `ci:act:fast`, `ci:act:qa-lite`, `ci:act:lint`, `ci:act:build`, `ci:act:test`, and `ci:act:all`.
+
+#### Run everything (all workflows)
 
 ```bash
-pnpm ci:act         # run the whole .github/workflows/ci.yml
-pnpm ci:act:lint    # run only the lint job
-pnpm ci:act:test    # run only the test job (if defined)
-pnpm ci:act:build   # run only the build job (if defined)
-# Apple Silicon tip:
-pnpm ci:act:lint -- --container-architecture linux/amd64
+pnpm ci:act:all
+# Runs: PR CI  ➜  Fast Checks  ➜  Pre-release QA (lite)
 ```
+
+#### Run a specific workflow
+
+```bash
+pnpm ci:act:pr       # .github/workflows/pr-ci.yml  (lint → build → tests)
+pnpm ci:act:fast     # .github/workflows/fast-checks.yml  (format, lint, typecheck, quick tests)
+pnpm ci:act:qa-lite  # .github/workflows/pre-release-qa.yml  (build + smoke + publint; no pack/upload)
+```
+
+#### Run a single PR-CI job
+
+```bash
+pnpm ci:act:lint
+pnpm ci:act:build
+pnpm ci:act:test
+
+```
+
+#### First-time setup tip
+
+```bash
+# Map ubuntu-latest to a local image once (required for act):
+act -P ubuntu-latest=catthehacker/ubuntu:act-22.04 --list
+```
+
+#### Apple Silicon tip
+
+```bash
+# One-off override:
+pnpm ci:act:pr -- --container-architecture linux/amd64
+
+# Or set an env var for the command:
+ACT_DEFAULT_PLATFORM=linux/amd64 pnpm ci:act:pr
+
+```
+
+> If you ever see an artifact-upload error locally, you’re likely simulating a tag run.
+> Our workflows only upload artifacts on RC tags (`vX.Y.Z-rc.N`). For local runs, use `pnpm ci:act:qa-lite` which skips
+> packing/upload.
 
 ---
 
-### Contributing
+## Contributing
 
 - Fork the repo
 
@@ -274,6 +314,32 @@ pnpm ci:act:lint -- --container-architecture linux/amd64
 - Push to the branch: git push origin feat/your-feature
 
 - Open a Pull Request
+
+### Local Dev Loop (test in another project without publishing)
+
+You can develop **utils-box** and try it live in another app using a local link.
+
+- In utils-box, terminal A:
+
+  ```bash
+  pnpm run build:watch
+  ```
+
+- In your **test app** (e.g. `/dev/my-app/react`), terminal B:
+
+  ```bash
+  # remove any previous install (ok if it wasn't installed)
+  pnpm remove utils-box || true
+
+  # add a symlink to your local package (adjust the path if needed)
+  pnpm add link:../../utils-box
+
+  # start your app's dev server
+  pnpm dev
+  ```
+
+Now edit code in `utils-box/src/**` → it rebuilds to `dist/` → your test app auto-picks changes (HMR or after a
+refresh).
 
 ---
 

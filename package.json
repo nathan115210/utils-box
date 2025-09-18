@@ -2,30 +2,70 @@
   "name": "utils-box",
   "version": "0.1.0",
   "description": "Reusable React & Next.js hooks and TypeScript utilities",
-  "main": "dist/utils-box.cjs.js",
-  "module": "dist/utils-box.es.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
   "types": "dist/types/index.d.ts",
   "exports": {
-    "./react/*": "./dist/react/*",
-    "./utils/*": "./dist/utils/*"
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./react/*": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/react/*/*.mjs",
+      "require": "./dist/react/*/*.cjs"
+    },
+    "./utils/*": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/utils/*/*.mjs",
+      "require": "./dist/utils/*/*.cjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "react/*": [
+        "dist/types/index.d.ts"
+      ],
+      "utils/*": [
+        "dist/types/index.d.ts"
+      ],
+      "*": [
+        "dist/types/index.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"
   ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
+  },
   "scripts": {
     "prepare": "husky",
     "dev": "vite",
     "dev:utils": "pnpm run --filter utils-box dev",
     "build": "vite build",
+    "build:watch": "vite build --watch --emptyOutDir=false",
+    "clean": "rimraf dist",
     "test": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "lint:fix:tests": "eslint \"src/**/*.{spec,test}.{ts,tsx}\" --fix",
-    "ci:act": "act -W .github/workflows/pr-ci.yml -P ubuntu-latest=catthehacker/ubuntu:act-22.04",
-    "ci:act:lint": "act -W .github/workflows/pr-ci.yml -j lint -P ubuntu-latest=catthehacker/ubuntu:act-22.04",
-    "ci:act:build": "act -W .github/workflows/pr-ci.yml -j build -P ubuntu-latest=catthehacker/ubuntu:act-22.04",
-    "ci:act:test": "act -W .github/workflows/pr-ci.yml -j test -P ubuntu-latest=catthehacker/ubuntu:act-22.04"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings=0",
+    "test:watch": "vitest --watch",
+    "check:all": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm run test",
+    "ci:act:all": "bash .github/scripts/act-all.sh",
+    "qa:local": "rm -rf dist && pnpm build && node -e \"require('./dist/index.cjs'); console.log('CJS OK')\" && node -e \"import('./dist/index.mjs').then(()=>console.log('ESM OK'))\" && pnpm dlx publint@latest",
+    "qa:pack": "pnpm qa:local && pnpm pack"
   },
   "keywords": [
     "react-hooks",
@@ -77,6 +117,7 @@
     "prettier": "3.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "rimraf": "^6.0.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.41.0",
     "vite": "^6.3.2",

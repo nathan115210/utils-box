@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type RefObject } from 'react';
 
-export default function usePictureInPicture(videoRef: RefObject<HTMLVideoElement | null>) {
+export function usePictureInPicture(videoRef: RefObject<HTMLVideoElement | null>) {
   const [isSupported, setIsSupported] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -63,3 +63,5 @@ export default function usePictureInPicture(videoRef: RefObject<HTMLVideoElement
     togglePictureInPicture: toggle,
   };
 }
+
+export default usePictureInPicture;

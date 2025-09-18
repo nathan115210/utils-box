@@ -27,8 +27,11 @@ tsconfig.tsbuildinfo
 
 # Optional: lockfiles
 package-lock.json
-# yarn.lock
-# pnpm-lock.yaml
+yarn.lock
+pnpm-lock.yaml
+.pnpm-store/
 
 # keep husky hooks in repo
 !.husky/
+
+act-artifacts/
