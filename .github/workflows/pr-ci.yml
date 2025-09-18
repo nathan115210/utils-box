@@ -1,13 +1,29 @@
+# .github/workflows/pr-ci.yml
 name: CI
 
 on:
-  push:
-    branches: [main]
+  # Run on PRs against any branch and on direct pushes to master
   pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.mdx'
+      - 'dist/**'
+      - '.gitignore'
+      - 'LICENSE'
+  push:
+    branches: [master]
+    # Skip purely docs changes to save CI time
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.mdx'
+      - 'dist/**'
+      - '.gitignore'
+      - 'LICENSE'
 
 permissions:
   contents: read
 
+# Ensure only one CI per ref runs at a time (new one cancels old)
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -19,26 +35,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1) Install Node (no pnpm cache here)
-      - uses: actions/setup-node@v4
+      # Use the composite action for Node + pnpm + cache + install
+      - uses: ./.github/actions/pnpm-setup
         with:
           node-version: 20
+          frozen-lockfile: true
+          install: true
 
-      # 2) Install pnpm from package.json "packageManager"
-      - uses: pnpm/action-setup@v4
-
-      # 3) Cache pnpm store (works in act + GH)
-      - name: Get pnpm store path
-        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      - uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-pnpm-store-
-
-      - name: Install deps
-        run: pnpm install --frozen-lockfile
-
+      # Check formatting only on tracked & relevant files
       - name: Prettier check (tracked files only)
         run: |
           git ls-files -z -- \
@@ -46,6 +50,7 @@ jobs:
             '**/*.{json,md,mdx,yml,yaml}' \
           | xargs -0 -r pnpm exec prettier --check
 
+      # Flat-config ESLint, zero warnings allowed
       - name: ESLint (flat config)
         run: >
           pnpm exec eslint
@@ -60,24 +65,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/pnpm-setup
         with:
           node-version: 20
-      - uses: pnpm/action-setup@v4
-      - name: Get pnpm store path
-        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      - uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-pnpm-store-
+          frozen-lockfile: true
+          install: true
 
-      - name: Install deps
-        run: pnpm install --frozen-lockfile
-
+      # Type-only compile to fail fast on TS errors
       - name: Type check
         run: pnpm exec tsc -p tsconfig.json --noEmit
 
+      # Build library (Vite)
       - name: Vite build
         run: pnpm build
 
@@ -88,14 +86,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/pnpm-setup
         with:
           node-version: 20
-      - uses: pnpm/action-setup@v4
-      - name: Get pnpm store path
-        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      - uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-pnp
+          frozen-lockfile: true
+          install: true
+
+      # Run unit tests
+      - name: Run tests
+        run: pnpm test

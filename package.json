@@ -59,10 +59,13 @@
     "format:check": "prettier --check .",
     "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "lint:fix:tests": "eslint \"src/**/*.{spec,test}.{ts,tsx}\" --fix",
-    "ci:act": "act -W .github/workflows/pr-ci.yml -P ubuntu-latest=catthehacker/ubuntu:act-22.04",
-    "ci:act:lint": "act -W .github/workflows/pr-ci.yml -j lint -P ubuntu-latest=catthehacker/ubuntu:act-22.04",
-    "ci:act:build": "act -W .github/workflows/pr-ci.yml -j build -P ubuntu-latest=catthehacker/ubuntu:act-22.04",
-    "ci:act:test": "act -W .github/workflows/pr-ci.yml -j test -P ubuntu-latest=catthehacker/ubuntu:act-22.04"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings=0",
+    "test:watch": "vitest --watch",
+    "check:all": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm run test",
+    "ci:act:all": "bash .github/scripts/act-all.sh",
+    "qa:local": "rm -rf dist && pnpm build && node -e \"require('./dist/index.cjs'); console.log('CJS OK')\" && node -e \"import('./dist/index.mjs').then(()=>console.log('ESM OK'))\" && pnpm dlx publint@latest",
+    "qa:pack": "pnpm qa:local && pnpm pack"
   },
   "keywords": [
     "react-hooks",
